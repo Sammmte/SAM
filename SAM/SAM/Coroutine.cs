@@ -6,7 +6,6 @@ namespace SAM.Coroutines
     {
         private IEnumerator iterator;
         public bool paused;
-        internal bool check;
 
         public Coroutine(IEnumerator _iterator)
         {
@@ -49,27 +48,9 @@ namespace SAM.Coroutines
 
             if(moveNext)
             {
-                if (recursiveIterator.Current is YieldInstruction)
+                if (recursiveIterator.Current is YieldInstruction || recursiveIterator.Current is IEnumerator)
                 {
-                    if (((YieldInstruction)recursiveIterator.Current).KeepWaiting)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return RecursiveMoveNext(recursiveIterator);
-                    }
-                }
-                else if (recursiveIterator.Current is IEnumerator)
-                {
-                    if (RecursiveMoveNext((IEnumerator)recursiveIterator.Current))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return RecursiveMoveNext(recursiveIterator);
-                    }
+                    return RecursiveMoveNext(recursiveIterator);
                 }
 
                 return true;
