@@ -40,10 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Coroutine.cs" />
-    <Compile Include="CoroutineNest.cs" />
+    <Compile Include="Coroutines\Coroutine.cs" />
+    <Compile Include="Coroutines\CoroutineNest.cs" />
+    <Compile Include="DataContainer.cs" />
+    <Compile Include="Tasks\IDelegateTask.cs" />
+    <Compile Include="Tasks\IParameterizedDelegateTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="YieldInstruction.cs" />
+    <Compile Include="Tasks\ActionTask.cs" />
+    <Compile Include="Tasks\FuncTask.cs" />
+    <Compile Include="Tasks\TaskT.cs" />
+    <Compile Include="Tasks\ParameterizedActionTask.cs" />
+    <Compile Include="Tasks\ParameterizedFuncTask.cs" />
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Coroutines\YieldInstruction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
