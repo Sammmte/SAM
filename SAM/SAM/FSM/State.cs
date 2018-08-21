@@ -37,21 +37,7 @@ namespace SAM.FSM
             transitions = new List<Transition<TState, TTrigger>>();
         }
 
-        internal void Enter()
-        {
-            if(onEnter != null)
-            {
-                onEnter();
-            }
-        }
-
-        internal void Exit()
-        {
-            if(onExit != null)
-            {
-                onExit();
-            }
-        }
+        
 
         internal void AddTransition(TTrigger trigger, TState stateTo)
         {
@@ -100,6 +86,28 @@ namespace SAM.FSM
             return false;
         }
 
+        internal void Enter()
+        {
+            OnEnter();
+
+            if (onEnter != null)
+            {
+                onEnter();
+            }
+        }
+
+        internal void Exit()
+        {
+            OnExit();
+
+            if (onExit != null)
+            {
+                onExit();
+            }
+        }
+
+        protected abstract void OnEnter();
+        protected abstract void OnExit();
         public abstract void Update();
     }
 }

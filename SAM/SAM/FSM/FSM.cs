@@ -17,14 +17,22 @@ namespace SAM.FSM
             }
         }
 
+        public int StateCount
+        {
+            get
+            {
+                return states.Count;
+            }
+        }
+
         public FSM()
         {
             states = new Dictionary<TState, State<TState, TTrigger>>();
         }
 
-        public void AddState(TState state_p, State<TState, TTrigger> state)
+        public void AddState(State<TState, TTrigger> state)
         {
-            states.Add(state_p, state);
+            states.Add(state.InnerState, state);
         }
 
         public void MakeTransition(TState stateFrom, TTrigger trigger, TState stateTo)
