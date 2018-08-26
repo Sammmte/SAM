@@ -3,19 +3,11 @@ using System.Collections.Generic;
 
 namespace SAM.FSM
 {
-    public class FSM<TState, TTrigger> where TState : Enum where TTrigger : Enum
+    public class FSM<TState, TTrigger, TChangedStateEventArgs> where TState : Enum where TTrigger : Enum where TChangedStateEventArgs : struct
     {
-        private Dictionary<TState, State<TState, TTrigger>> states;
+        private Dictionary<TState, State<TState, TTrigger, TChangedStateEventArgs>> states;
 
-        private State<TState, TTrigger> currentState;
-
-        public State<TState, TTrigger> CurrentState
-        {
-            get
-            {
-                return currentState;
-            }
-        }
+        public State<TState, TTrigger, TChangedStateEventArgs> CurrentState { get; private set; }
 
         public int StateCount
         {
@@ -27,10 +19,10 @@ namespace SAM.FSM
 
         public FSM()
         {
-            states = new Dictionary<TState, State<TState, TTrigger>>();
+            states = new Dictionary<TState, State<TState, TTrigger, TChangedStateEventArgs>>();
         }
 
-        public void AddState(State<TState, TTrigger> state)
+        public void AddState(State<TState, TTrigger, TChangedStateEventArgs> state)
         {
             states.Add(state.InnerState, state);
         }
@@ -57,45 +49,50 @@ namespace SAM.FSM
 
         public void UpdateCurrentState()
         {
-            if(currentState != null)
+            if(CurrentState != null)
             {
-                currentState.Update();
+                CurrentState.Update();
             }
         }
 
         public void StartBy(TState state)
         {
-            if(currentState == null)
+            if(CurrentState == null)
             {
-                SetState(state);
+                TChangedStateEventArgs e = default(TChangedStateEventArgs);
+                SetState(state, ref e);
             }
         }
 
-        private void SetState(TState state)
+        private void SetState(TState state, ref TChangedStateEventArgs e)
         {
             if(states.ContainsKey(state))
             {
-                currentState = states[state];
+                CurrentState = states[state];
 
-                currentState.Enter();
+                CurrentState.Enter(e);
             }
         }
 
         public void Trigger(TTrigger trigger)
         {
-            if(currentState != null && currentState.ContainsTransition(trigger))
-            {
-                State<TState, TTrigger> previous = currentState;
+            TChangedStateEventArgs e = default(TChangedStateEventArgs);
+            Trigger(trigger, ref e);
+        }
 
-                TState nextState = default(TState);
+        public void Trigger(TTrigger trigger, ref TChangedStateEventArgs e)
+        {
+            if (CurrentState != null && CurrentState.ContainsTransition(trigger))
+            {
+                State<TState, TTrigger, TChangedStateEventArgs> previous = CurrentState;
+
+                TState nextState;
 
                 previous.TryGetNext(trigger, out nextState);
 
                 previous.Exit();
 
-                currentState = states[nextState];
-
-                currentState.Enter();
+                SetState(nextState, ref e);
             }
         }
     }

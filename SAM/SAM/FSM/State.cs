@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 namespace SAM.FSM
 {
-    public abstract class State<TState, TTrigger> where TState : Enum where TTrigger : Enum
+    public delegate void ChangedStateEvent<TState, TTrigger, TEventArgs>(State<TState, TTrigger, TEventArgs> state, ref TEventArgs e) where TState : Enum where TTrigger : Enum where TEventArgs : struct;
+
+    public abstract class State<TState, TTrigger, TChangedStateEventArgs> where TState : Enum where TTrigger : Enum where TChangedStateEventArgs : struct
     {
-        protected FSM<TState, TTrigger> stateMachine;
+        protected FSM<TState, TTrigger, TChangedStateEventArgs> stateMachine;
         private List<Transition<TState, TTrigger>> transitions;
 
         protected TState innerState;
@@ -18,7 +20,7 @@ namespace SAM.FSM
             }
         }
 
-        public FSM<TState, TTrigger> StateMachine
+        public FSM<TState, TTrigger, TChangedStateEventArgs> StateMachine
         {
             get
             {
@@ -26,18 +28,16 @@ namespace SAM.FSM
             }
         }
 
-        public event Action onEnter;
-        public event Action onExit;
+        public event ChangedStateEvent<TState, TTrigger, TChangedStateEventArgs> onEnter;
+        public event Action<State<TState, TTrigger, TChangedStateEventArgs>> onExit;
 
-        protected State(FSM<TState, TTrigger> stateMachine, TState state)
+        protected State(FSM<TState, TTrigger, TChangedStateEventArgs> stateMachine, TState state)
         {
             this.stateMachine = stateMachine;
             innerState = state;
 
             transitions = new List<Transition<TState, TTrigger>>();
         }
-
-        
 
         internal void AddTransition(TTrigger trigger, TState stateTo)
         {
@@ -86,13 +86,13 @@ namespace SAM.FSM
             return false;
         }
 
-        internal void Enter()
+        internal void Enter(TChangedStateEventArgs e)
         {
-            OnEnter();
+            OnEnter(ref e);
 
             if (onEnter != null)
             {
-                onEnter();
+                onEnter(this, ref e);
             }
         }
 
@@ -102,12 +102,17 @@ namespace SAM.FSM
 
             if (onExit != null)
             {
-                onExit();
+                onExit(this);
             }
         }
 
-        protected abstract void OnEnter();
+        internal void Update()
+        {
+            OnUpdate();
+        }
+
+        protected abstract void OnEnter(ref TChangedStateEventArgs e);
         protected abstract void OnExit();
-        public abstract void Update();
+        protected abstract void OnUpdate();
     }
 }
