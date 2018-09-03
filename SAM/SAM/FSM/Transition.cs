@@ -15,6 +15,13 @@ namespace SAM.FSM
             this.stateTo = stateTo;
         }
 
+        public Transition(TState stateFrom, TTrigger trigger)
+        {
+            this.stateFrom = stateFrom;
+            this.trigger = trigger;
+            stateTo = default;
+        }
+
         public bool Equals(Transition<TState, TTrigger> other)
         {
             if (stateFrom.Equals(other.stateFrom) && trigger.Equals(other.trigger))

@@ -31,11 +31,6 @@ namespace SAM.Timers
 
                 if (currentTime >= Interval)
                 {
-                    if(onTick != null)
-                    {
-                        onTick(this);
-                    }
-
                     if (!Loop)
                     {
                         Stop();
@@ -43,6 +38,11 @@ namespace SAM.Timers
                     else
                     {
                         currentTime = 0;
+                    }
+
+                    if (onTick != null)
+                    {
+                        onTick(this);
                     }
                 }
             }

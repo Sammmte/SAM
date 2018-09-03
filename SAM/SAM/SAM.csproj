@@ -43,7 +43,10 @@
     <Compile Include="Coroutines\Coroutine.cs" />
     <Compile Include="Coroutines\CoroutineNest.cs" />
     <Compile Include="DataContainer.cs" />
+    <Compile Include="FSM\BFSM\BFSM.cs" />
+    <Compile Include="FSM\BFSM\StateBehaviour.cs" />
     <Compile Include="FSM\FSM.cs" />
+    <Compile Include="FSM\IFSM.cs" />
     <Compile Include="FSM\State.cs" />
     <Compile Include="FSM\Transition.cs" />
     <Compile Include="StructReference.cs" />
