@@ -19,7 +19,7 @@ namespace SAM.FSM
             }
         }
 
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
 
         public State<TState, TTrigger> CurrentState { get; protected set; }
 
