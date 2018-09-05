@@ -19,6 +19,8 @@ namespace SAM.FSM
             }
         }
 
+        public bool Active { get; set; }
+
         public State<TState, TTrigger> CurrentState { get; protected set; }
 
         public TState InnerCurrentState { get; protected set; }
@@ -137,7 +139,7 @@ namespace SAM.FSM
 
         public void UpdateCurrentState()
         {
-            if (CurrentState != null)
+            if (CurrentState != null && Active)
             {
                 CurrentState.Update();
             }
