@@ -8,7 +8,17 @@ namespace SAM.Timers
         public bool Loop { get; set; }
 
         private float currentTime;
+
         private bool active;
+
+        public bool Active
+        {
+            get
+            {
+                return active && !Paused;
+            }
+        }
+        public bool Paused { get; private set; }
         
         public event Action<SyncTimer> onTick;
 
@@ -21,11 +31,12 @@ namespace SAM.Timers
         {
             currentTime = 0;
             active = true;
+            Paused = false;
         }
 
         public void Update(float elapsed)
         {
-            if(active)
+            if(Active)
             {
                 currentTime += elapsed;
 
@@ -51,6 +62,17 @@ namespace SAM.Timers
         public void Stop()
         {
             active = false;
+            UnPause();
+        }
+
+        public void Pause()
+        {
+            Paused = true;
+        }
+
+        public void UnPause()
+        {
+            Paused = false;
         }
     }
 }
