@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Coroutines\Coroutine.cs" />
     <Compile Include="Coroutines\CoroutineNest.cs" />
+    <Compile Include="Coroutines\CoroutineT.cs" />
     <Compile Include="DataContainer.cs" />
     <Compile Include="FSM\BFSM\BFSM.cs" />
     <Compile Include="FSM\BFSM\StateBehaviour.cs" />
@@ -59,7 +60,7 @@
     <Compile Include="Tasks\ParameterizedActionTask.cs" />
     <Compile Include="Tasks\ParameterizedFuncTask.cs" />
     <Compile Include="Tasks\Task.cs" />
-    <Compile Include="Coroutines\YieldInstruction.cs" />
+    <Compile Include="Coroutines\IYieldInstruction.cs" />
     <Compile Include="Timers\SyncTimer.cs" />
   </ItemGroup>
   <ItemGroup />

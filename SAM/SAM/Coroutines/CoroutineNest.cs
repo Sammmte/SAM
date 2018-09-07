@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace SAM.Coroutines
 {
-    public sealed class CoroutineNest : YieldInstruction
+    public sealed class CoroutineNest : IYieldInstruction, IEnumerable<Coroutine>
     {
         private List<Coroutine> coroutines;
-        private List<Coroutine> removed;
         
         /// <summary>
         /// if is set on true the UpdateAsRoot method does what the KeepWaiting property does, else the method does nothing.
@@ -16,11 +16,11 @@ namespace SAM.Coroutines
         {
             get
             {
-                return coroutines.Count - removed.Count;
+                return coroutines.Count;
             }
         }
 
-        public override bool KeepWaiting
+        public bool KeepWaiting
         {
             get
             {
@@ -28,10 +28,11 @@ namespace SAM.Coroutines
             }
         }
 
+        private int currentIndex;
+
         public CoroutineNest()
         {
             coroutines = new List<Coroutine>();
-            removed = new List<Coroutine>();
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace SAM.Coroutines
         /// </summary>
         public bool Contains(Coroutine coroutine)
         {
-            return coroutines.Contains(coroutine) && removed.Contains(coroutine) == false;
+            return coroutines.Contains(coroutine);
         }
 
         /// <summary>
@@ -122,7 +123,8 @@ namespace SAM.Coroutines
         {
             if(Contains(coroutine))
             {
-                removed.Add(coroutine);
+                coroutines.Remove(coroutine);
+                currentIndex--;
             }
         }
 
@@ -131,39 +133,19 @@ namespace SAM.Coroutines
         /// </summary>
         public void RemoveAll()
         {
-            for(int i = 0; i < coroutines.Count; ++i)
-            {
-                RemoveCoroutine(coroutines[i]);
-            }
-        }
-
-        private void Flush()
-        {
-            foreach(Coroutine coroutine in removed)
-            {
-                coroutines.Remove(coroutine);
-            }
-
-            removed.Clear();
+            coroutines.Clear();
+            currentIndex = 0;
         }
 
         private bool AreCoroutinesOver()
         {
-            if(Count > 0)
+            for (currentIndex = 0; currentIndex < coroutines.Count; currentIndex++)
             {
-                Flush();
+                Coroutine current = coroutines[currentIndex];
 
-                for (int i = 0; i < coroutines.Count; ++i)
+                if (current.KeepWaiting == false)
                 {
-                    Coroutine current = coroutines[i];
-
-                    if (removed.Contains(current) == false)
-                    {
-                        if (current.KeepWaiting == false)
-                        {
-                            RemoveCoroutine(current);
-                        }
-                    }
+                    RemoveCoroutine(current);
                 }
             }
 
@@ -180,6 +162,16 @@ namespace SAM.Coroutines
             {
                 AreCoroutinesOver();
             }
+        }
+
+        public IEnumerator<Coroutine> GetEnumerator()
+        {
+            return coroutines.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
     }
 }

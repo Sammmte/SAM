@@ -2,32 +2,16 @@
 
 namespace SAM.Coroutines
 {
-    public class Coroutine : IYieldInstruction
+    public class Coroutine<T> : Coroutine
     {
-        public IEnumerator Iterator { get; protected set; }
-        public bool paused;
+        public T Result { get; protected set; }
 
-        public Coroutine(IEnumerator iterator)
+        public Coroutine(IEnumerator iterator) : base(iterator)
         {
-            Override(iterator);
+
         }
 
-        public bool KeepWaiting
-        {
-            get
-            {
-                if(paused)
-                {
-                    return true;
-                }
-                else
-                {
-                    return RecursiveMoveNext(Iterator);
-                }
-            }
-        }
-        
-        protected virtual bool RecursiveMoveNext(IEnumerator recursiveIterator)
+        protected override bool RecursiveMoveNext(IEnumerator recursiveIterator)
         {
             if (recursiveIterator.Current is IYieldInstruction yieldInst)
             {
@@ -43,10 +27,14 @@ namespace SAM.Coroutines
                     return true;
                 }
             }
+            else if (recursiveIterator.Current is T result)
+            {
+                Result = result;
+            }
 
             bool moveNext = recursiveIterator.MoveNext();
 
-            if(moveNext)
+            if (moveNext)
             {
                 if (recursiveIterator.Current is IYieldInstruction || recursiveIterator.Current is IEnumerator)
                 {
@@ -57,11 +45,6 @@ namespace SAM.Coroutines
             }
 
             return false;
-        }
-
-        public void Override(IEnumerator _iterator)
-        {
-            Iterator = _iterator;
         }
     }
 }
