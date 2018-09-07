@@ -13,6 +13,8 @@ namespace SAM.FSM.BFSM
 
         private bool kickoff;
 
+        public bool Active { get; set; } = true;
+
         public TState InnerCurrentState { get; protected set; }
 
         public event ChangedStateEvent<TState> onStateChanged;
@@ -24,7 +26,7 @@ namespace SAM.FSM.BFSM
 
         public void UpdateCurrentState()
         {
-            if(kickoff)
+            if(kickoff && Active)
             {
                 UpdateBehaviours(InnerCurrentState);
             }

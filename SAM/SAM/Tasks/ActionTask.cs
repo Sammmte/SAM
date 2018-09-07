@@ -33,15 +33,9 @@ namespace SAM.Tasks
 
         protected override bool InnerTask(object obj)
         {
-            try
-            {
-                action();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            action();
+
+            return true;
         }
     }
 }

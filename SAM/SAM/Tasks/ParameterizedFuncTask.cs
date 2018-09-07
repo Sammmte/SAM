@@ -47,15 +47,9 @@
 
         protected override bool InnerTask(object obj)
         {
-            try
-            {
-                Data = funcWithParams.Execute();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            Data = funcWithParams.Execute();
+
+            return true;
         }
     }
 }

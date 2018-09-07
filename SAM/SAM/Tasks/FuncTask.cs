@@ -33,15 +33,9 @@ namespace SAM.Tasks
 
         protected override bool InnerTask(object obj)
         {
-            try
-            {
-                Data = func();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            Data = func();
+
+            return true;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace SAM.Tasks
     {
         protected internal DataContainer<T> dataContainer;
 
-        public Action<T> onCatchData;
+        public event Action<T> onCatchData;
 
         /// <summary>
         /// The data obtained by the task

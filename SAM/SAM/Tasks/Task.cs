@@ -8,42 +8,20 @@ namespace SAM.Tasks
     /// </summary>
     public abstract class Task
     {
-        private bool done;
-        private bool succeed;
-        private bool isRunning;
-
         /// <summary>
         /// if the task has finished
         /// </summary>
-        public bool Done
-        {
-            get
-            {
-                return done;
-            }
-        }
+        public bool Done { get; protected set; }
 
         /// <summary>
         /// if the task succeed.
         /// </summary>
-        public bool Succeed
-        {
-            get
-            {
-                return succeed;
-            }
-        }
+        public bool Succeed { get; protected set; }
 
         /// <summary>
         /// if the task is running.
         /// </summary>
-        public bool IsRunning
-        {
-            get
-            {
-                return isRunning;
-            }
-        }
+        public bool IsRunning { get; protected set; }
 
         protected Thread thread;
 
@@ -73,8 +51,8 @@ namespace SAM.Tasks
         /// <summary>
         /// Execute the task with an object parameter
         /// </summary>
-        /// <param name="obj"></param>
-        public void DoTask(object obj)
+        /// <param name="param"></param>
+        public void DoTask(object param)
         {
             GeneralReset();
 
@@ -82,19 +60,27 @@ namespace SAM.Tasks
 
             thread = new Thread(TaskModel);
 
-            thread.Start(obj);
+            thread.Start(param);
         }
 
         private void TaskModel(object obj)
         {
-            isRunning = true;
+            IsRunning = true;
 
-            succeed = InnerTask(obj);
+            try
+            {
+                Succeed = InnerTask(obj);
+            }
+            catch
+            {
+                Succeed = false;
+            }
+            
 
-            done = true;
-            isRunning = false;
+            Done = true;
+            IsRunning = false;
 
-            if(succeed)
+            if(Succeed)
             {
                 if(onSucceed != null)
                 {
@@ -120,9 +106,9 @@ namespace SAM.Tasks
 
         private void GeneralReset()
         {
-            done = false;
-            succeed = false;
-            isRunning = false;
+            Done = false;
+            Succeed = false;
+            IsRunning = false;
         }
 
         /// <summary>

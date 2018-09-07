@@ -47,14 +47,7 @@
 
         protected override bool InnerTask(object obj)
         {
-            try
-            {
-                actionWithParams.Execute();
-            }
-            catch
-            {
-                return false;
-            }
+            actionWithParams.Execute();
 
             return true;
         }
