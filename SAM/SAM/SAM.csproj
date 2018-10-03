@@ -62,6 +62,7 @@
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Coroutines\IYieldInstruction.cs" />
     <Compile Include="Timers\SyncTimer.cs" />
+    <Compile Include="UniquePairMap.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
