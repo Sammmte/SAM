@@ -8,5 +8,10 @@
         {
             this.data = data;
         }
+
+        public DataContainer()
+        {
+
+        }
     }
 }
