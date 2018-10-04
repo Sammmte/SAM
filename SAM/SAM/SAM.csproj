@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\ObjectPool.cs" />
     <Compile Include="Coroutines\Coroutine.cs" />
     <Compile Include="Coroutines\CoroutineNest.cs" />
     <Compile Include="Coroutines\CoroutineT.cs" />
@@ -62,7 +63,7 @@
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Coroutines\IYieldInstruction.cs" />
     <Compile Include="Timers\SyncTimer.cs" />
-    <Compile Include="UniquePairMap.cs" />
+    <Compile Include="Collections\UniquePairMap.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
