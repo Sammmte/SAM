@@ -51,7 +51,6 @@
     <Compile Include="FSM\IFSM.cs" />
     <Compile Include="FSM\State.cs" />
     <Compile Include="FSM\Transition.cs" />
-    <Compile Include="StructReference.cs" />
     <Compile Include="Tasks\IDelegateTask.cs" />
     <Compile Include="Tasks\IParameterizedDelegateTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,7 +62,6 @@
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Coroutines\IYieldInstruction.cs" />
     <Compile Include="Timers\SyncTimer.cs" />
-    <Compile Include="Collections\UniquePairMap.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
